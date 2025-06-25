@@ -7,6 +7,7 @@ class ShortURL(models.Model):
     short_url = models.CharField(max_length=20, unique=True, verbose_name="短網址代碼")
     is_active = models.BooleanField(default=True, verbose_name="是否啟用")
     password = models.CharField(max_length=128, blank=True, null=True, verbose_name="密碼（可選）")
+    remarks = models.TextField(blank=True, null=True, verbose_name="備註說明")
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="建立時間")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="更新時間")
