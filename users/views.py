@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CustomUserCreationForm as UserCreationForm
 from common.decorators import htmx_required
+from django.http import HttpResponse
+from django.urls import reverse
 
 @htmx_required
 def sign_in(request):
@@ -33,11 +35,15 @@ def create_session(request):
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
-            return redirect('shorturls:index')
-        else:
-            messages.error(request, 'Email 或 密碼 錯誤，請重新確認')
-    else:
-        messages.error(request, '請輸入 Email 和 密碼')
+            messages.success(request, '成功登入')
+            if request.headers.get("HX-Request") == "true":
+                response = HttpResponse()
+                response["HX-Redirect"] = reverse('shorturls:index')
+                return response
+            else:
+                return redirect('shorturls:index')
+    messages.error(request, 'Email 或 密碼 錯誤，請重新確認')
+    return render(request, 'users/sign_in.html')
 
 @login_required
 @require_POST

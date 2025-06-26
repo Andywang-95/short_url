@@ -4,7 +4,7 @@
   @keydown.escape.window="$refs.modalWrapper.remove()"
   x-ref="modalWrapper"
   id="modal-container"
-  class="fixed inset-0 z-50 flex items-center justify-center"
+  class="fixed inset-0 z-20 flex items-center justify-center"
 >
   <!-- 背景遮罩 -->
   <div
@@ -32,6 +32,9 @@
     <form
       method="POST"
       action="{% url 'users:create' %}"
+      hx-post="{% url 'users:create' %}"
+      hx-target="#modal-container"
+      hx-swap="outerHTML"
       class="space-y-4"
     >
       {% csrf_token %}
@@ -42,17 +45,27 @@
       </div>
       {% endif %}
 
-      <label>Email</label>
-      {{ form.email.errors }}
+      <label class="inline-flex items-center w-full">
+        Email
+        <span class="text-red-600 ml-2 text-sm">{{ form.email.errors }}</span>
+      </label>
       {{ form.email|add_class:"w-full px-3 py-2 border rounded" }}
 
-      <label>密碼</label>
-      {{ form.password1.errors }}
+      <label class="inline-flex items-center w-full">
+        密碼
+        <span class="text-red-600 ml-2 text-sm">{{ form.password1.errors }}</span>
+      </label>
       {{ form.password1|add_class:"w-full px-3 py-2 border rounded" }}
 
-      <label>確認密碼</label>
-      {{ form.password2.errors }}
+      <label class="inline-flex items-center w-full">
+        確認密碼
+        <span class="text-red-600 ml-2 text-sm">{{ form.password2.errors }}</span>
+      </label>
       {{ form.password2|add_class:"w-full px-3 py-2 border rounded" }}
+
+      <p class="text-sm text-gray-400 mt-1 mb-4">
+        *密碼需至少8位，且包含至少一個英文與一個數字
+      </p>
 
       <button
         type="submit"
@@ -63,4 +76,8 @@
     </form>
 
   </div>
+</div>
+
+<div id="messages" hx-swap-oob="true">
+  {% include 'partial/messages.html' %}
 </div>
