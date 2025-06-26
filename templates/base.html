@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShortURLs</title>
+    <link rel="stylesheet" href="{% static 'assets/styles.css' %}" />
+    <script type="module" src="{% static 'assets/app.js' %}"></script>
+</head>
+<body class="bg-gray-50 text-gray-800" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  <nav class="fixed top-0 inset-x-0 z-50 bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg">
+    {% include 'partial/nav.html' %}
+  </nav>
+  <section class="pt-16">
+    <main id='main'>
+      {% if user.is_authenticated %}
+        {% include "shorturls/index.html" %}
+      {% else %}
+        {% include "home.html" %}
+      {% endif %}
+    </main>
+  </section>
+</body>
+</html>

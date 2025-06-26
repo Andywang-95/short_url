@@ -1,0 +1,35 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="flex justify-between h-16 items-center">
+    <!-- Logo -->
+    <div class="flex-shrink-0">
+      <a href="{% if user.is_authenticated %}{% url "shorturls:index" %}{% else %}/{% endif %}" class="text-3xl font-extrabold tracking-wide font-mono italic">ShortURLs</a>
+    </div>
+    <!-- Login button -->
+    {% if user.is_authenticated %}
+      <div>
+        <form action="{% url 'users:logout' %}" method="post"
+          class="px-4 py-2 rounded bg-white text-indigo-700 font-semibold shadow hover:bg-gray-100">
+          {% csrf_token %}
+          <button type="submit">
+            登出
+          </button>
+        </form>
+      <div>
+    {% else %}
+      <div>
+        <a href="{% url 'users:sign_in' %}"
+          hx-get="{% url 'users:sign_in' %}"
+          hx-target="body"
+          hx-swap="beforeend"
+          class="px-4 py-2 rounded bg-white text-indigo-700 font-semibold shadow hover:bg-gray-100">
+          登入</a>
+        <a href="{% url 'users:sign_up' %}"
+          hx-get="{% url 'users:sign_up' %}"
+          hx-target="body"
+          hx-swap="beforeend"
+          class="ml-4 px-4 py-2 rounded bg-purple-100 text-purple-800 font-semibold shadow hover:bg-purple-200">
+          註冊</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
