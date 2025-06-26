@@ -1,0 +1,69 @@
+{% load form_tags %}
+<div
+  x-data
+  @keydown.escape.window="$refs.modalWrapper.remove()"
+  x-ref="modalWrapper"
+  id="modal-container"
+  class="fixed inset-0 z-50 flex items-center justify-center"
+>
+  <!-- 背景遮罩 -->
+  <div
+    class="fixed inset-0 bg-black opacity-50"
+    @click="$refs.modalWrapper.remove()"
+  ></div>
+
+  <!-- Modal 內容區 -->
+  <div
+    x-ref="modalContent"
+    @click.stop
+    class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md relative z-10"
+  >
+    <!-- 關閉按鈕 -->
+    <button
+      @click="$refs.modalWrapper.remove()"
+      class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl cursor-pointer"
+      aria-label="關閉"
+    >
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold mb-6 text-center">註冊賬號</h2>
+
+    <form
+      method="POST"
+      action="{% url 'users:create' %}"
+      hx-post="{% url 'users:create' %}"
+      hx-target="#modal-container"
+      hx-swap="outerHTML"
+      class="space-y-4"
+    >
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+      <div class="text-red-600 mb-2">
+        {{ form.non_field_errors }}
+      </div>
+      {% endif %}
+
+      <label>Email</label>
+      {{ form.email.errors }}
+      {{ form.email|add_class:"w-full px-3 py-2 border rounded" }}
+
+      <label>密碼</label>
+      {{ form.password1.errors }}
+      {{ form.password1|add_class:"w-full px-3 py-2 border rounded" }}
+
+      <label>確認密碼</label>
+      {{ form.password2.errors }}
+      {{ form.password2|add_class:"w-full px-3 py-2 border rounded" }}
+
+      <button
+        type="submit"
+        class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 cursor-pointer"
+      >
+        註冊
+      </button>
+    </form>
+
+  </div>
+</div>
