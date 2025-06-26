@@ -15,8 +15,8 @@ def test_create_shorturl():
     assert short.is_active is True
     assert short.password is None
     # 測試反向關聯
-    assert user.short_urls.count() == 1
-    assert user.short_urls.first() == short
+    assert user.shorturls.count() == 1
+    assert user.shorturls.first() == short
     print("✅ 短網址建立測試成功！")
 
 @pytest.mark.django_db
