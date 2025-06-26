@@ -15,7 +15,7 @@ class ShortURL(models.Model):
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="short_urls",
+        related_name="shorturls",
         verbose_name="建立者"
     )
     def __str__(self):

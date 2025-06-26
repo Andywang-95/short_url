@@ -1,0 +1,88 @@
+
+<main id="main" hx-swap-oob="innerHTML">
+  <div class="max-w-5xl mx-auto p-6">
+    <!-- 麵包屑 -->
+    <nav class="text-sm mb-4" aria-label="Breadcrumb">
+      <ol class="list-reset flex text-gray-600">
+        <li>短網址</li>
+      </ol>
+    </nav>
+
+    <!-- 新增按鈕 -->
+    <div class="flex justify-end mb-4">
+      <a href="{% url 'shorturls:create' %}"  class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+        新增短網址
+      </a>
+    </div>
+
+    <!-- 短網址列表 -->
+    <table class="w-full border-collapse border border-gray-300">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border border-gray-300 p-2 w-12 text-center">啟用</th>
+          <th class="border border-gray-300 p-2">短網址</th>
+          <th class="border border-gray-300 p-2">原網址</th>
+          <th class="border border-gray-300 p-2">備注說明</th>
+          <th class="border border-gray-300 p-2">密碼保護</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for shorturl in shorturls %}
+        <tr class="hover:bg-gray-50">
+          <td class="border border-gray-300 p-2 text-center">
+            <input type="checkbox" {% if shorturl.is_active %}checked{% endif %} />
+          </td>
+
+          <td class="border border-gray-300 p-2">
+            <a href="{% url 'shorturls:detail' shorturl.pk %}" class="block">
+              <input
+                type="text"
+                value="{{ shorturl.short_url }}"
+                readonly
+                class="w-full bg-transparent border-none focus:outline-none cursor-pointer"
+              />
+            </a>
+          </td>
+
+          <td class="border border-gray-300 p-2">
+            <a href="{{ shorturl.url }}" class="block truncate" title="{{ shorturl.url }}">
+              <input
+                type="text"
+                value="{{ shorturl.url }}"
+                readonly
+                class="w-full bg-transparent border-none focus:outline-none cursor-pointer truncate"
+              />
+            </a>
+          </td>
+
+          <td class="border border-gray-300 p-2">
+            <a href="{% url 'shorturls:detail' shorturl.pk %}" class="block">
+              <input
+                type="text"
+                value="{{ shorturl.remark|default:'' }}"
+                readonly
+                class="w-full bg-transparent border-none focus:outline-none cursor-pointer"
+              />
+            </a>
+          </td>
+
+          <td class="border border-gray-300 p-2 text-center">
+            <a href="{% url 'shorturls:detail' shorturl.pk %}" class="block">
+              <input
+                type="text"
+                value="{% if shorturl.password %}有密碼{% else %}無{% endif %}"
+                readonly
+                class="w-full bg-transparent border-none focus:outline-none cursor-pointer text-center"
+              />
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="p-4 text-center text-gray-500">沒有任何短網址資料</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
