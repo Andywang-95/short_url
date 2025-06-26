@@ -13,6 +13,9 @@
     {% include 'partial/nav.html' %}
   </nav>
   <section class="pt-16">
+    <div id="messages">
+      {% include 'partial/messages.html' %}
+    </div>
     <main id='main'>
       {% if user.is_authenticated %}
         {% include "shorturls/index.html" %}
