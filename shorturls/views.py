@@ -18,6 +18,5 @@ def index(request):
         )
     return render(request, 'base.html', {
         'shorturls': shorturls,})
-    
 def create(request):
     pass

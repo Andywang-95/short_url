@@ -4,13 +4,13 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import CustomUserCreationForm as UserCreationForm
-from shorturls import views as shorturls_views
+from common.decorators import htmx_required
 
-
+@htmx_required
 def sign_in(request):
     return render(request, 'users/sign_in.html')
 
-
+@htmx_required
 def sign_up(request):
     form = UserCreationForm()
     return render(request, 'users/sign_up.html', {'form': form})
@@ -38,7 +38,7 @@ def create_session(request):
             messages.error(request, 'Email 或 密碼 錯誤，請重新確認')
     else:
         messages.error(request, '請輸入 Email 和 密碼')
-        
+
 @login_required
 @require_POST
 def delete_session(request):
