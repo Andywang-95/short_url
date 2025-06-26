@@ -1,0 +1,31 @@
+{
+  "name": "short_url",
+  "version": "1.0.0",
+  "description": "此專案制作一個縮網址的網頁界面",
+  "main": "index.js",
+  "scripts": {
+    "watch": "concurrently --names 'esbuild,tailwind' -c 'yellow,blue'  'esbuild src/scripts/input.js --bundle --outfile=static/assets/app.js --watch' 'npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles.css --watch'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andywang-95/short_url.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Andywang-95/short_url/issues"
+  },
+  "homepage": "https://github.com/Andywang-95/short_url#readme",
+  "dependencies": {
+    "alpinejs": "^3.14.9",
+    "htmx": "^0.0.2",
+    "htmx.org": "^2.0.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.10",
+    "concurrently": "^9.2.0",
+    "esbuild": "^0.25.5",
+    "tailwindcss": "^4.1.10"
+  }
+}
