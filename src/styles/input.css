@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 @layer components {
+  .message-container {
+    @apply fixed top-20 left-1/2 transform -translate-x-1/2 z-50 flex flex-col space-y-2 w-96;
+  }
+
   .message-toast {
-    @apply fixed top-20 left-1/2 transform -translate-x-1/2 z-50 text-white px-6 py-2 rounded shadow-lg opacity-70;
+    @apply text-white px-6 py-2 rounded shadow-lg opacity-70;
   }
 
   .message-toast.success {
@@ -11,5 +15,9 @@
 
   .message-toast.error {
     @apply bg-red-600;
+  }
+
+  .message-toast.warning {
+    @apply bg-yellow-600
   }
 }
