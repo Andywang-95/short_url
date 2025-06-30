@@ -43,18 +43,26 @@ uv：0.7.14 ↑
 Django：5.2.3
 
 將專案拉回本機
-`git clone https://github.com/Andywang-95/short_url.git`
+```bash
+git clone https://github.com/Andywang-95/short_url.git
+```
 
 同步虛擬環境
-`uv sync`
+```bash
+uv sync
+```
 
 設定`.env`環境變數
 
 執行資料庫遷移
-`make migrate` or `uv run manage.py migrate`
+```bash
+make migrate` or `uv run manage.py migrate
+```
 
 啟動伺服器
-`make run` or `uv run manage.py runserver`
+```bash
+make run` or `uv run manage.py runserver
+```
 
 ## 使用技術
 - 前端：HTML,CSS,JavaScript,TailwindCSS,Alpine.js,HTMX
