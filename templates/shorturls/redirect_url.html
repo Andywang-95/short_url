@@ -1,0 +1,32 @@
+{% extends "shorturls/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-gray-50">
+  <div class="bg-white p-6 rounded shadow max-w-md w-full">
+    <h2 class="text-lg font-semibold mb-4 text-center">🔐 此短網址受密碼保護</h2>
+    
+    <form method="POST">
+      {% csrf_token %}
+      <input
+        type="password"
+        name="password"
+        class="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
+        placeholder="請輸入密碼"
+        required
+      />
+      <button type="submit" class="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        前往連結
+      </button>
+    </form>
+
+    {% if messages %}
+      <div class="mt-4 text-sm text-red-600">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

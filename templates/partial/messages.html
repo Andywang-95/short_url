@@ -13,7 +13,7 @@
       x-transition:leave="transition ease-in duration-500"
       x-transition:leave-start="opacity-70 translate-y-0"
       x-transition:leave-end="opacity-0 translate-y-5"
-      class="message-toast {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}"
+      class="message-toast {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% endif %}"
     >
       {{ message }}
     </div>

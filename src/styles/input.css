@@ -18,6 +18,6 @@
   }
 
   .message-toast.warning {
-    @apply bg-yellow-600
+    @apply bg-yellow-600;
   }
 }

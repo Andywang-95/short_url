@@ -2,10 +2,9 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.shortcuts import redirect
 
-def htmx_redirect(request, url):
+def htmx_redirect(request, url, **kwargs):
     if request.headers.get("HX-Request") == "true":
-        response = HttpResponse()
-        response["HX-Redirect"] = reverse(url)
+        response = HttpResponse("", status=200)
+        response["HX-Redirect"] = reverse(url, kwargs=kwargs)
         return response
-    else:
-        return redirect(url)
+    return redirect(url, kwargs=kwargs)
