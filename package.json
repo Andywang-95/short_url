@@ -4,7 +4,8 @@
   "description": "此專案制作一個縮網址的網頁界面",
   "main": "index.js",
   "scripts": {
-    "watch": "concurrently --names 'esbuild,tailwind' -c 'yellow,blue'  'esbuild src/scripts/input.js --bundle --outfile=static/assets/app.js --watch' 'npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles.css --watch'"
+    "watch": "concurrently --names 'esbuild,tailwind' -c 'yellow,blue'  'esbuild src/scripts/input.js --bundle --outfile=static/assets/app.js --watch' 'npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles.css --watch'",
+    "build": "concurrently 'esbuild src/scripts/input.js --bundle --outfile=static/assets/app.js' 'npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles.css'"
   },
   "repository": {
     "type": "git",
