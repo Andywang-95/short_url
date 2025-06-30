@@ -49,6 +49,8 @@ def get_descriptions(request, url):
         desc_tag = soup.find('meta', attrs={'name': 'description'})
         if desc_tag and desc_tag.get('content'):
             return desc_tag['content']
+        else:
+            return None
     except requests.RequestException as e:
         print(f"取得描述失敗: {e}")
     return None

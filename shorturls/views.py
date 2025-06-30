@@ -114,10 +114,10 @@ def get_context(request):
     url = request.GET.get("url")
     print(f"取得頁面資訊的URL: {url}")
     context = get_descriptions(request, url)
-    if context:
-        return HttpResponse(context)
-    messages.error(request, '無法取得頁面資訊')
-    return render(request, 'partial/messages.html')
+    if not context:
+        messages.error(request, '無法取得頁面資訊')
+        context = ''
+    return render(request, 'shorturls/get_context.html', {'context': context})
 
 
 @login_required
