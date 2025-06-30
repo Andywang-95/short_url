@@ -34,6 +34,6 @@ def test_create_utm():
     assert utm.term is None  # 預設可為 None
     assert str(utm) == f"UTM for {short}: google, cpc, spring_sale"
     # 測試反向關聯
-    assert short.utm.count() == 1
-    assert short.utm.first() == utm
+    assert short.utm is not None
+    assert short.utm == utm
     print("✅ UTM建立測試成功！")
