@@ -22,7 +22,7 @@ class ShortURL(models.Model):
         return f"{self.short_url} → {self.url}"
 
 class UTM(models.Model):
-    short_url = models.ForeignKey(ShortURL, on_delete=models.CASCADE, related_name='utm')
+    short_url = models.OneToOneField(ShortURL, on_delete=models.CASCADE, related_name='utm')
     source = models.CharField(max_length=100)
     medium = models.CharField(max_length=100)
     campaign = models.CharField(max_length=100)

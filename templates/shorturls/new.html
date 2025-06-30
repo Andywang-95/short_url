@@ -1,0 +1,119 @@
+{% load form_tags %}
+
+<div id="messages" hx-swap-oob="innerHTML">
+  {% include 'partial/messages.html' %}
+</div>
+
+<div id="nav-container" hx-swap-oob="innerHTML">
+  <nav class="text-sm mb-4" aria-label="Breadcrumb">
+    <ol class="list-reset flex text-gray-600 space-x-2">
+      <li>
+        <a href="{% url 'shorturls:home' %}" class="hover:underline text-gray-500">HOME</a>
+        <span class="mx-1 text-gray-400">›</span>
+      </li>
+      <li>
+        <a href="{% url 'shorturls:index' %}" class="hover:underline text-gray-500">短網址</a>
+        <span class="mx-1 text-gray-400">›</span>
+      </li>
+      <li class="text-gray-800 font-medium">新增短網址</li>
+    </ol>
+  </nav>
+</div>
+
+<div id="urls-container" hx-swap-oob="innerHTML">
+  <form method="POST" action="{% url 'shorturls:create' %}" hx-post="{% url 'shorturls:create' %}" hx-target="#urls-container" hx-swap="none" class="space-y-6">
+    {% csrf_token %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 items-start">
+      
+      <!-- 原始連結 -->
+      <div class="flex flex-col">
+        <label class="mb-1 font-semibold text-sm">連結</label>
+        {{ form.url|add_class:"px-3 py-2 border rounded w-full" }}
+        {% if form.url.errors %}
+          <p class="text-red-600 text-xs mt-1">
+            {{ form.url.errors.0 }}
+          </p>
+        {% endif %}
+      </div>
+
+      <!-- 短網址 + 複製按鈕 -->
+      <div class="flex flex-col" x-data="copyShortUrl">
+        <label class="mb-1 font-semibold text-sm">短網址</label>
+        <div class="relative flex">
+          <!-- 前綴 base URL -->
+          <span class="inline-flex items-center px-3 border border-r-0 rounded-l bg-gray-100 text-sm text-gray-600" x-ref="prefix">
+            {{ short_url_base }}
+          </span>
+          <!-- Input 欄位，左側不要圓角，去掉 padding-left -->
+          <input
+            x-ref="code"
+            type="text"
+            name="{{ form.short_url.name }}"
+            value="{{ form.short_url.value|default_if_none:'' }}"
+            class="border border-l-0 rounded-r px-3 py-2 w-full bg-gray-50"
+          />
+          <button type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black" @click="copy">
+            <i class="fa fa-copy"></i>
+          </button>
+        </div>
+        {% if form.short_url.errors %}
+          <p class="text-red-600 text-xs mt-1">
+            {{ form.short_url.errors.0 }}
+          </p>
+        {% else %}
+          <p class="text-xs mt-1 min-h-[1.25rem] invisible">placeholder</p>
+        {% endif %}
+      </div>
+
+      <!-- 密碼保護 -->
+      <div class="flex flex-col">
+        <label class="mb-1 font-semibold text-sm">密碼保護</label>
+        <div class="relative">
+          {{ form.password|add_class:"px-3 py-2 border rounded w-full pr-10" }}
+          <button type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black">
+            <i class="fa fa-eye"></i>
+          </button>
+        </div>
+        {% if form.password.errors %}
+          <p class="text-red-600 text-xs mt-1">
+            {{ form.password.errors.0 }}
+          </p>
+        {% else %}
+          <p class="text-xs mt-1 min-h-[1.25rem] invisible">placeholder</p>
+        {% endif %}
+      </div>
+
+      <!-- 備註說明 -->
+      <div class="col-span-3 flex flex-col mt-4">
+        <label class="mb-1 font-semibold text-sm">
+          備註說明 
+          <span class="inline-block bg-black text-white text-xs px-2 py-0.5 rounded ml-2">取得頁面資訊</span>
+        </label>
+        {{ form.remarks|add_class:"w-full px-3 py-2 border rounded min-h-[50px]" }}
+        {% if form.remarks.errors %}
+          <p class="text-red-600 text-xs mt-1">
+            {{ form.remarks.errors.0 }}
+          </p>
+        {% else %}
+          <p class="text-xs mt-1 min-h-[1.25rem] invisible">placeholder</p>
+        {% endif %}
+      </div>
+
+      <!-- 是否啟用 -->
+      <div class="col-span-3 flex items-center mt-2">
+        {{ form.is_active|add_class:"form-check-input" }}
+        <label class="ml-2 text-sm font-medium">是否啟用</label>
+      </div>
+    </div>
+
+    <!-- 操作按鈕 -->
+    <div class="flex gap-4 mt-6">
+      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition cursor-pointer">
+        新增
+      </button>
+      <a href="{% url 'shorturls:index' %}" class="border border-blue-600 text-blue-600 px-6 py-2 rounded hover:bg-blue-200">
+        取消
+      </a>
+    </div>
+  </form>
+</div>

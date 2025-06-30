@@ -1,0 +1,65 @@
+<div id="messages" hx-swap-oob="innerHTML">
+  {% include 'partial/messages.html' %}
+</div>
+
+<div
+  x-data
+  @keydown.escape.window="$refs.modalWrapper.remove()"
+  x-ref="modalWrapper"
+  id="modal-container"
+  class="fixed inset-0 z-50 flex items-center justify-center"
+>
+  <!-- 背景遮罩 -->
+  <div
+    class="fixed inset-0 bg-black opacity-50"
+    @click="$refs.modalWrapper.remove()"
+  ></div>
+
+  <!-- Modal 主體 -->
+  <div
+    x-ref="modalContent"
+    @click.stop
+    class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg relative z-10"
+  >
+    <!-- 關閉按鈕 -->
+    <button
+      @click="$refs.modalWrapper.remove()"
+      class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
+      aria-label="關閉"
+    >
+      &times;
+    </button>
+
+    <!-- Modal 標題 -->
+    <h2 class="text-xl font-bold mb-4 text-center">短網址詳情</h2>
+
+    <!-- 內容 -->
+    <div class="space-y-2 text-sm text-gray-800">
+      <div class="flex items-start gap-2"><strong class="w-16 text-right whitespace-nowrap">短網址：</strong><a href="{{ url.url }}" class="text-blue-600 hover:underline hover:text-blue-800 break-all whitespace-normal pl-1">  {{ short_url_base }}{{ url.short_url }}</a></div>
+      <div class="flex items-start gap-2"><strong class="w-16 text-right whitespace-nowrap">原始網址：</strong><a href="{{ url.url }}" class="text-blue-600 hover:underline hover:text-blue-800 break-all whitespace-normal pl-1"> {{ url.url }} </a></div>
+      <div class="flex items-start gap-2"><strong class="w-16 text-right whitespace-nowrap">備註：</strong> {{ url.remark|default:"-" }}</div>
+      <div class="flex items-start gap-2"><strong class="w-16 text-right whitespace-nowrap">密碼：</strong> {% if url.password %}<i class="fa-solid fa-check text-xl" style="color: #60cb3a;"></i>{% else %}<i class="fa-solid fa-xmark text-xl" style="color: #e92525;"></i>{% endif %}</div>
+      <div class="flex items-start gap-2"><strong class="w-16 text-right whitespace-nowrap">啟用狀態：</strong> {% if url.is_active %}<i class="fa-solid fa-check text-xl" style="color: #60cb3a;"></i>{% else %}<i class="fa-solid fa-xmark text-xl" style="color: #e92525;"></i>{% endif %}</div>
+    </div>
+
+    <!-- 按鈕列 -->
+    <div class="mt-6 flex justify-between gap-4">
+      <button
+        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        hx-post="{% url "shorturls:delete" url.short_url %}"
+        hx-swap="none"
+        onclick="return confirm('是否確認刪除{{ url.short_url }}')"
+      >
+        刪除
+      </button>
+      <button
+        hx-post="{% url 'shorturls:edit' url.short_url %}"
+        hx-target="#modal-container" 
+        hx-swap="outerHTML" 
+        class="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+      >
+        編輯
+      </button>
+    </div>
+  </div>
+</div>

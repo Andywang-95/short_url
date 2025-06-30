@@ -1,88 +1,71 @@
-
+<div id="messages" hx-swap-oob="innerHTML">
+  {% include 'partial/messages.html' %}
+</div>
 <main id="main" hx-swap-oob="innerHTML">
   <div class="max-w-5xl mx-auto p-6">
     <!-- 麵包屑 -->
-    <nav class="text-sm mb-4" aria-label="Breadcrumb">
-      <ol class="list-reset flex text-gray-600">
-        <li>短網址</li>
-      </ol>
-    </nav>
+    <div id="nav-container">
+      <nav class="text-sm mb-4" aria-label="Breadcrumb">
+        <ol class="list-reset flex text-gray-600 space-x-2">
+          <li>
+            <a href="{% url 'shorturls:index' %}" class="hover:underline text-gray-500">HOME</a>
+            <span class="mx-1 text-gray-400">›</span>
+          </li>
+          <li>
+            <a href="{% url 'shorturls:index' %}" class="hover:underline text-gray-500">短網址</a>
+            <span class="mx-1 text-gray-400">›</span>
+          </li>
+        </ol>
+      </nav>
+    </div>
 
     <!-- 新增按鈕 -->
-    <div class="flex justify-end mb-4">
-      <a href="{% url 'shorturls:create' %}"  class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+    <div id="new-short-url-btn" class="flex justify-end mb-4">
+      <a hx-get="{% url 'shorturls:new' %}" hx-target="#new-short-url-btn" hx-swap="outerHTML" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition cursor-pointer">
         新增短網址
       </a>
     </div>
-
     <!-- 短網址列表 -->
-    <table class="w-full border-collapse border border-gray-300">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="border border-gray-300 p-2 w-12 text-center">啟用</th>
-          <th class="border border-gray-300 p-2">短網址</th>
-          <th class="border border-gray-300 p-2">原網址</th>
-          <th class="border border-gray-300 p-2">備注說明</th>
-          <th class="border border-gray-300 p-2">密碼保護</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for shorturl in shorturls %}
-        <tr class="hover:bg-gray-50">
-          <td class="border border-gray-300 p-2 text-center">
-            <input type="checkbox" {% if shorturl.is_active %}checked{% endif %} />
-          </td>
+    <div id="urls-container">
+      <div class="hidden md:flex items-center justify-between px-4 py-2 bg-gray-100 text-gray-600 text-sm font-semibold rounded">
+        <div class="w-[5%]">啟用</div>
+        <div class="w-[25%]">短網址</div>
+        <div class="w-[30%]">原網址</div>
+        <div class="w-[25%]">備註說明</div>
+        <div class="w-[15%] text-center">密碼</div>
+      </div>
 
-          <td class="border border-gray-300 p-2">
-            <a href="{% url 'shorturls:detail' shorturl.pk %}" class="block">
-              <input
-                type="text"
-                value="{{ shorturl.short_url }}"
-                readonly
-                class="w-full bg-transparent border-none focus:outline-none cursor-pointer"
-              />
-            </a>
-          </td>
-
-          <td class="border border-gray-300 p-2">
-            <a href="{{ shorturl.url }}" class="block truncate" title="{{ shorturl.url }}">
-              <input
-                type="text"
-                value="{{ shorturl.url }}"
-                readonly
-                class="w-full bg-transparent border-none focus:outline-none cursor-pointer truncate"
-              />
-            </a>
-          </td>
-
-          <td class="border border-gray-300 p-2">
-            <a href="{% url 'shorturls:detail' shorturl.pk %}" class="block">
-              <input
-                type="text"
-                value="{{ shorturl.remark|default:'' }}"
-                readonly
-                class="w-full bg-transparent border-none focus:outline-none cursor-pointer"
-              />
-            </a>
-          </td>
-
-          <td class="border border-gray-300 p-2 text-center">
-            <a href="{% url 'shorturls:detail' shorturl.pk %}" class="block">
-              <input
-                type="text"
-                value="{% if shorturl.password %}有密碼{% else %}無{% endif %}"
-                readonly
-                class="w-full bg-transparent border-none focus:outline-none cursor-pointer text-center"
-              />
-            </a>
-          </td>
-        </tr>
+      <!-- 資料列 -->
+      <div class="space-y-2 mt-2">
+        {% for url in urls %}
+          <div
+            x-data
+            hx-get="{% url 'shorturls:detail' url.short_url %}"
+            hx-target="body"
+            hx-swap="beforeend"
+            class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded border border-gray-200 hover:shadow hover:bg-gray-50 transition cursor-pointer"
+          >
+            <div class="flex items-center gap-2 mb-2 md:mb-0 md:w-[5%]" @click.stop>
+              <input type="checkbox" {% if url.is_active %}checked{% endif %} />
+            </div>
+            <div class="md:w-[25%] text-sm text-gray-800 truncate">
+              <input type="text" value="{{ short_url_base }}{{ url.short_url }}" readonly class="w-full bg-transparent border-none focus:outline-none cursor-pointer" />
+            </div>
+            <div class="md:w-[30%] text-sm text-gray-800 truncate">
+              <input type="text" value="{{ url.url }}" readonly class="w-full bg-transparent border-none focus:outline-none cursor-pointer" />
+            </div>
+            <div class="md:w-[25%] text-sm text-gray-600 truncate">
+              <input type="text" value="{{ url.remark|default:'-' }}" readonly class="w-full bg-transparent border-none focus:outline-none cursor-pointer" />
+            </div>
+            <div class="md:w-[15%] text-center text-sm text-gray-600">
+              {% if url.password %}<i class="fa-solid fa-check text-xl" style="color: #60cb3a;"></i>{% else %}<i class="fa-solid fa-xmark text-xl" style="color: #e92525;"></i>{% endif %}
+            </div>
+          </div>
         {% empty %}
-        <tr>
-          <td colspan="5" class="p-4 text-center text-gray-500">沒有任何短網址資料</td>
-        </tr>
+          <div class="text-center text-gray-500 py-4">沒有任何短網址資料</div>
         {% endfor %}
-      </tbody>
-    </table>
+      </div>
+
+    </div>
   </div>
 </main>
