@@ -37,34 +37,39 @@
 
       <!-- 資料列 -->
       <div class="space-y-2 mt-2">
-        {% for url in urls %}
-          <div
-            x-data
-            hx-get="{% url 'shorturls:detail' url.short_url %}"
-            hx-target="body"
-            hx-swap="beforeend"
-            class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded border border-gray-200 hover:shadow hover:bg-gray-50 transition cursor-pointer"
-          >
-            <div class="flex items-center gap-2 mb-2 md:mb-0 md:w-[5%]" @click.stop>
-              <input type="checkbox" {% if url.is_active %}checked{% endif %} />
-            </div>
-            <div class="md:w-[25%] text-sm text-gray-800 truncate">
-              <input type="text" value="{{ short_url_base }}{{ url.short_url }}" readonly class="w-full bg-transparent border-none focus:outline-none cursor-pointer" />
-            </div>
-            <div class="md:w-[30%] text-sm text-gray-800 truncate">
-              <input type="text" value="{{ url.url }}" readonly class="w-full bg-transparent border-none focus:outline-none cursor-pointer" />
-            </div>
-            <div class="md:w-[25%] text-sm text-gray-600 truncate">
-              <input type="text" value="{{ url.remark|default:'-' }}" readonly class="w-full bg-transparent border-none focus:outline-none cursor-pointer" />
-            </div>
-            <div class="md:w-[15%] text-center text-sm text-gray-600">
-              {% if url.password %}<i class="fa-solid fa-check text-xl" style="color: #60cb3a;"></i>{% else %}<i class="fa-solid fa-xmark text-xl" style="color: #e92525;"></i>{% endif %}
-            </div>
-          </div>
-        {% empty %}
-          <div class="text-center text-gray-500 py-4">沒有任何短網址資料</div>
-        {% endfor %}
+  {% for url in urls %}
+    <div
+      x-data
+      hx-get="{% url 'shorturls:detail' url.short_url %}"
+      hx-target="body"
+      hx-swap="beforeend"
+      class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded border border-gray-200 hover:shadow hover:bg-gray-50 transition cursor-pointer"
+    >
+      <div class="flex items-center gap-2 mb-2 md:mb-0 md:w-[5%]" @click.stop>
+        <input type="checkbox" class="w-6 h-6" {% if url.is_active %}checked{% endif %} />
       </div>
+      <div class="md:w-[25%] text-sm text-gray-800 truncate" title="{{ short_url_base }}{{ url.short_url }}">
+        {{ short_url_base }}{{ url.short_url }}
+      </div>
+      <div class="md:w-[30%] text-sm text-gray-800 truncate" title="{{ url.url }}">
+        {{ url.url }}
+      </div>
+      <div class="md:w-[25%] text-sm text-gray-600 truncate" title="{{ url.remark }}">
+        {% if url.remarks %}{{ url.remarks }}{% endif %}
+      </div>
+      <div class="md:w-[15%] text-center text-sm text-gray-600">
+        {% if url.password %}
+          <i class="fa-solid fa-check text-xl" style="color: #60cb3a;"></i>
+        {% else %}
+          <i class="fa-solid fa-xmark text-xl" style="color: #e92525;"></i>
+        {% endif %}
+      </div>
+    </div>
+  {% empty %}
+    <div class="text-center text-gray-500 py-4">沒有任何短網址資料</div>
+  {% endfor %}
+</div>
+
 
     </div>
   </div>

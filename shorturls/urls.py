@@ -12,7 +12,8 @@ urlpatterns = [
     path('<str:code>/delete', views.delete, name='delete'),
     path('<str:code>/edit', views.edit, name='edit'),
     path('<str:code>/update', views.update, name='update'),
-    path('copy/success', views.copyShortUrl, name='copy_success'),
+    path('copy_success', views.copy_shortUrl, name='copy_success'),
+    path('get_description', views.get_context, name='get_context'),
     # path('<str:short_code>/', views.redirect_to_long_url, name='redirect_to_long_url'),
     # path('stats/<str:short_code>/', views.url_stats, name='url_stats'),
 ]

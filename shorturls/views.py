@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -6,7 +7,7 @@ from django.db.models import Prefetch
 from common.decorators import htmx_required
 from .forms import ShortURLForm
 from .models import UTM
-from .services import all_shorturls, detail_shorturl, url_utm_params
+from .services import all_shorturls, detail_shorturl, url_utm_params, get_descriptions
 from common.utils import htmx_redirect
 from django.conf import settings
 short_url_base = settings.SHORT_URL_BASE
@@ -51,10 +52,10 @@ def create(request):
             urls = all_shorturls(request.user)
         except Exception as e:
             messages.warning(request, '短網址建立成功，但UTM資訊不完整，可能無法準確追蹤。')
-        return render(request, 'shorturls/index.html', {'urls': urls})
+        return render(request, 'shorturls/index.html', {'urls': urls, 'short_url_base': short_url_base})
     else:
         messages.error(request, '短網址建立失敗，請檢查輸入的資料。')
-        return render(request, 'shorturls/new.html', {'form': form})
+        return render(request, 'shorturls/new.html', {'form': form, 'short_url_base': short_url_base})
 
 @login_required
 @htmx_required
@@ -105,7 +106,16 @@ def update(request, code):
     messages.error(request, '更新短網址失敗，請檢查輸入的資料。')
     return render(request, 'shorturls/edit.html', {'form': form, 'url': shorturl, 'short_url_base': short_url_base})
 
-def copyShortUrl(request):
+def copy_shortUrl(request):
     messages.success(request, '短網址已複製到剪貼簿。')
     print("複製短網址成功")
+    return render(request, 'partial/messages.html')
+
+def get_context(request):
+    url = request.GET.get("url")
+    print(f"取得頁面資訊的URL: {url}")
+    context = get_descriptions(request, url)
+    if context:
+        return HttpResponse(context)
+    messages.error(request, '無法取得頁面資訊')
     return render(request, 'partial/messages.html')
