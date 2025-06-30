@@ -104,3 +104,8 @@ def update(request, code):
         return htmx_redirect(request, 'shorturls:detail', code=code)
     messages.error(request, '更新短網址失敗，請檢查輸入的資料。')
     return render(request, 'shorturls/edit.html', {'form': form, 'url': shorturl, 'short_url_base': short_url_base})
+
+def copyShortUrl(request):
+    messages.success(request, '短網址已複製到剪貼簿。')
+    print("複製短網址成功")
+    return render(request, 'partial/messages.html')
