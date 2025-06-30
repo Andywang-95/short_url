@@ -6919,7 +6919,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     return {
       fullUrl: "",
       async copy() {
-        this.fullUrl = `${this.$refs.prefix.textContent.trim()}${this.$refs.code.value}`;
+        if (this.$refs.fullUrl) {
+          this.fullUrl = this.$refs.fullUrl.textContent.trim();
+        } else {
+          this.fullUrl = `${this.$refs.prefix.textContent.trim()}${this.$refs.code.value}`;
+        }
         await navigator.clipboard.writeText(this.fullUrl);
         htmx_esm_default.ajax("GET", this.$el.dataset.copySuccess, {
           target: "#messages",

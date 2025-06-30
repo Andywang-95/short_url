@@ -95,10 +95,14 @@
       </div>
 
       <!-- 備註說明 -->
-      <div class="col-span-3 flex flex-col mt-4">
+      <div class="col-span-3 flex flex-col mt-4" x-data="{ get originalUrl() { return $refs.url?.value || '' } }">
         <label class="mb-1 font-semibold text-sm w-fit">
           備註說明 
           <button
+            hx-get="{% url "shorturls:get_context" %}"
+            hx-target="#id_remarks"
+            hx-swap="innerHTML"
+            hx-include="#id_url"
             class="inline-block bg-black text-white text-xs px-2 py-0.5 rounded ml-2 hover:bg-gray-700 active:bg-gray-900 cursor-pointer"
           >
             取得頁面資訊
