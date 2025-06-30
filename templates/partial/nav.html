@@ -2,7 +2,7 @@
   <div class="flex justify-between h-16 items-center">
     <!-- Logo -->
     <div class="flex-shrink-0">
-      <a href="{% if user.is_authenticated %}{% url "shorturls:index" %}{% else %}{% url "shorturls:home" %}{% endif %}" class="text-3xl font-extrabold tracking-wide font-mono italic">ShortURLs</a>
+      <a href="{% if user.is_authenticated %}{% url "shorturls:index" %}{% else %}{% url "shorturls:home" %}{% endif %}" class="text-3xl font-extrabold tracking-wide font-mono italic">LinkCut</a>
     </div>
     <!-- Login button -->
     {% if user.is_authenticated %}
